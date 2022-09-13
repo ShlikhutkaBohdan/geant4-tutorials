@@ -8,6 +8,7 @@
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "detector.hh"
 
 class MyDetectorConstruction: public G4VUserDetectorConstruction 
 {
@@ -16,6 +17,10 @@ public:
   ~MyDetectorConstruction() override;
   
   G4VPhysicalVolume *Construct() override;
+
+private:
+    G4LogicalVolume *logicDetector;
+    void ConstructSDandField() override;
 };
 
 #endif
