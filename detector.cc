@@ -24,7 +24,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
 
     G4int copyNo = touchable->GetCopyNumber();
 
-    G4cout << "Copy number: " << copyNo << G4endl;
+//    G4cout << "Copy number: " << copyNo << G4endl;
 
     G4VPhysicalVolume *physVol = touchable->GetVolume();
 
