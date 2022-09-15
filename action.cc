@@ -17,3 +17,8 @@ void MyActionInitialization::Build() const {
     SetUserAction(runAction);
 
 }
+
+void MyActionInitialization::BuildForMaster() const {
+    MyRunAction *runAction = new MyRunAction();
+    SetUserAction(runAction);
+}
