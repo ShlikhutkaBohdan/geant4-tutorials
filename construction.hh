@@ -9,6 +9,7 @@
 #include "G4NistManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "detector.hh"
+#include "G4GenericMessenger.hh"
 
 class MyDetectorConstruction: public G4VUserDetectorConstruction 
 {
@@ -19,8 +20,21 @@ public:
   G4VPhysicalVolume *Construct() override;
 
 private:
-    G4LogicalVolume *logicDetector;
     void ConstructSDandField() override;
+
+    G4GenericMessenger *fMessenger;
+
+    G4int nCols, nRows;
+
+    G4Box *solidWorld, *solidRadiator, *solidDetector;
+    G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector;
+
+    G4VPhysicalVolume *physWorld, *physRadiator, *physDetector;
+
+    G4Material *SiO2, *H2O, *Aerogel, *worldMat;
+    G4Element *C;
+
+    void DefineMaterials();
 };
 
 #endif
