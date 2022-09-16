@@ -12,11 +12,13 @@
 #include "physics.hh"
 #include "action.hh"
 
+//#define ENABLE_MULTITHREADING0
+
 int main(int argc, char **argv)
 {
     G4UIExecutive *ui = 0;
 
-#ifdef G4MULTITHREADED
+#if defined(G4MULTITHREADED) && defined(ENABLE_MULTITHREADING0)
     G4MTRunManager *runManager = new G4MTRunManager();
 #else
     G4RunManager *runManager = new G4RunManager();

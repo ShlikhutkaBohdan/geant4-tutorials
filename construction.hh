@@ -16,7 +16,11 @@ class MyDetectorConstruction: public G4VUserDetectorConstruction
 public:
   MyDetectorConstruction();
   ~MyDetectorConstruction() override;
-  
+
+  G4LogicalVolume *GetScoringVolume() const {
+      return fScoringVolume;
+  }
+
   G4VPhysicalVolume *Construct() override;
 
 private:
@@ -33,6 +37,8 @@ private:
 
     G4Material *SiO2, *H2O, *Aerogel, *worldMat;
     G4Element *C;
+
+    G4LogicalVolume *fScoringVolume;
 
     void DefineMaterials();
 };
