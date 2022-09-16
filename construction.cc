@@ -6,8 +6,8 @@ MyDetectorConstruction::MyDetectorConstruction() {
     fMessenger->DeclareProperty("nCols", nCols, "Number of columns");
     fMessenger->DeclareProperty("nRows", nRows, "Number of rows");
 
-    nCols = 100;
-    nRows = 100;
+    nCols = 10;
+    nRows = 10;
 
     DefineMaterials();
 }
