@@ -7,6 +7,8 @@
 
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4Geantino.hh"
+#include "G4IonTable.hh"
 
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction {
 public:

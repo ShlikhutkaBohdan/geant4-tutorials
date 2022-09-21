@@ -1,6 +1,7 @@
 #ifndef CONSTRUCTION_HH
 #define CONSTRUCTION_HH
 
+#include "G4Tubs.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -30,17 +31,26 @@ private:
 
     G4int nCols, nRows;
 
+    G4double xWorld, yWorld, zWorld;
+
+    G4bool isCherenkov, isScintillator;
+
     G4Box *solidWorld, *solidRadiator, *solidDetector;
-    G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector;
+    G4Tubs *solidScintillator;
 
-    G4VPhysicalVolume *physWorld, *physRadiator, *physDetector;
+    G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector, *logicScintillator;
 
-    G4Material *SiO2, *H2O, *Aerogel, *worldMat;
-    G4Element *C;
+    G4VPhysicalVolume *physWorld, *physRadiator, *physDetector, *physScintillator;
+
+    G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI;
+    G4Element *C, *Na, *I;
 
     G4LogicalVolume *fScoringVolume;
 
     void DefineMaterials();
+
+    void ConstructCherenkov();
+    void ConstructScintillator();
 };
 
 #endif
