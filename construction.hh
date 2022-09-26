@@ -11,8 +11,10 @@
 #include "G4SystemOfUnits.hh"
 #include "detector.hh"
 #include "G4GenericMessenger.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalSkinSurface.hh"
 
-class MyDetectorConstruction: public G4VUserDetectorConstruction 
+class MyDetectorConstruction: public G4VUserDetectorConstruction
 {
 public:
   MyDetectorConstruction();
@@ -35,8 +37,7 @@ private:
 
     G4bool isCherenkov, isScintillator;
 
-    G4Box *solidWorld, *solidRadiator, *solidDetector;
-    G4Tubs *solidScintillator;
+    G4Box *solidWorld, *solidRadiator, *solidDetector, *solidScintillator;
 
     G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector, *logicScintillator;
 
@@ -46,6 +47,8 @@ private:
     G4Element *C, *Na, *I;
 
     G4LogicalVolume *fScoringVolume;
+
+    G4OpticalSurface *mirrorSurface;
 
     void DefineMaterials();
 

@@ -12,7 +12,7 @@
 #include "physics.hh"
 #include "action.hh"
 
-//#define ENABLE_MULTITHREADING0
+#define ENABLE_MULTITHREADING0
 
 int main(int argc, char **argv)
 {
