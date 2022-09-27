@@ -29,6 +29,7 @@ public:
   void ConstructCherenkov();
   void ConstructScintillator();
   void ConstructTOF();
+  void ConstructAtmosphere();
 
 private:
     void ConstructSDandField() override;
@@ -39,16 +40,16 @@ private:
 
     G4double xWorld, yWorld, zWorld;
 
-    G4bool isCherenkov, isScintillator, isTOF;
+    G4bool isCherenkov, isScintillator, isTOF, isAtmosphere;
 
-    G4Box *solidWorld, *solidRadiator, *solidDetector, *solidScintillator;
+    G4Box *solidWorld, *solidRadiator, *solidDetector, *solidScintillator, *solidAtmosphere;
 
-    G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector, *logicScintillator;
+    G4LogicalVolume *logicWorld, *logicRadiator, *logicDetector, *logicScintillator, *logicAtmosphere[10];
 
-    G4VPhysicalVolume *physWorld, *physRadiator, *physDetector, *physScintillator;
+    G4VPhysicalVolume *physWorld, *physRadiator, *physDetector, *physScintillator, *physAtmosphere[10];
 
-    G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI;
-    G4Element *C, *Na, *I;
+    G4Material *SiO2, *H2O, *Aerogel, *worldMat, *NaI, *Air[10];
+    G4Element *C, *Na, *I, *N, *O;
 
     G4LogicalVolume *fScoringVolume;
 

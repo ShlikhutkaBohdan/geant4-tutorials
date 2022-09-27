@@ -2,11 +2,11 @@
 
 #include "G4MTRunManager.hh"
 #include "G4RunManager.hh"
-
 #include "G4UImanager.hh"
 #include "G4VisManager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
+#include "QGSP_BERT.hh" //for simulating hydronic processes
 
 #include "construction.hh"
 #include "physics.hh"
@@ -27,6 +27,10 @@ int main(int argc, char **argv)
     runManager->SetUserInitialization(new MyDetectorConstruction());
     runManager->SetUserInitialization(new MyPhysicsList());
     runManager->SetUserInitialization(new MyActionInitialization());
+
+    G4VModularPhysicsList *physics = new QGSP_BERT();
+    physics->RegisterPhysics(new G4DecayPhysics());
+    runManager->SetUserInitialization(physics);
 
     if (argc == 1) {
         ui = new G4UIExecutive(argc, argv);

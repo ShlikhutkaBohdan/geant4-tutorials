@@ -9,17 +9,19 @@ MyDetectorConstruction::MyDetectorConstruction() {
     fMessenger->DeclareProperty("isCherenkov", isCherenkov, "Toggle Cherenkov setup");
     fMessenger->DeclareProperty("isScintillator", isScintillator, "Toggle Scintillator setup");
     fMessenger->DeclareProperty("tof", isTOF, "Construct time of light");
+    fMessenger->DeclareProperty("atmosphere", isAtmosphere, "Construct Atmosphere");
 
     nCols = 10;
     nRows = 10;
 
-    xWorld = 5 * m;
-    yWorld = 5 * m;
-    zWorld = 5 * m;
+    xWorld = 40 * km;
+    yWorld = 40 * km;
+    zWorld = 20 * km;
 
     isCherenkov = false;
     isScintillator = false;
-    isTOF = true;
+    isTOF = false;
+    isAtmosphere = true;
 
     DefineMaterials();
 }
@@ -46,6 +48,10 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct() {
 
     if (isTOF) {
         ConstructTOF();
+    }
+
+    if (isAtmosphere) {
+        ConstructAtmosphere();
     }
 
     return physWorld;
@@ -86,7 +92,7 @@ void MyDetectorConstruction::ConstructScintillator() {
 
     G4LogicalSkinSurface *skin = new G4LogicalSkinSurface("skin", logicWorld, mirrorSurface);
 
-    solidDetector = new G4Box("solidDetector", 1*cm, 5*cm, 6*cm);
+    solidDetector = new G4Box("solidDetector", 1 * cm, 5 * cm, 6 * cm);
     logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicDetector");
 
     fScoringVolume = logicScintillator;
@@ -97,7 +103,8 @@ void MyDetectorConstruction::ConstructScintillator() {
             G4Translate3D transXScint(
                     G4ThreeVector(5. / tan(22.5 / 2 * deg) * cm + 5. * cm, 0 * cm, -40 * cm + i * 15 * cm));
 
-            G4Translate3D transXDet(G4ThreeVector(5. / tan(22.5 / 2 * deg) * cm + 6. * cm + 5. * cm, 0 * cm, -40 * cm + i * 15 * cm));
+            G4Translate3D transXDet(
+                    G4ThreeVector(5. / tan(22.5 / 2 * deg) * cm + 6. * cm + 5. * cm, 0 * cm, -40 * cm + i * 15 * cm));
 
             G4Transform3D transformScint = (rotZ) * (transXScint);
             G4Transform3D transformDet = (rotZ) * (transXDet);
@@ -106,26 +113,37 @@ void MyDetectorConstruction::ConstructScintillator() {
                                                  logicWorld, false, 0, true);
 
             physDetector = new G4PVPlacement(transformDet, logicDetector, "physDetector",
-                                                 logicWorld, false, 0, true);
+                                             logicWorld, false, 0, true);
         }
     }
 
 }
 
 void MyDetectorConstruction::ConstructTOF() {
-    solidDetector = new G4Box("solidDetector", 1.*m, 1.*m, 0.1*m);
+    solidDetector = new G4Box("solidDetector", 1. * m, 1. * m, 0.1 * m);
     logicDetector = new G4LogicalVolume(solidDetector, worldMat, "logicDetector");
 
-    physDetector = new G4PVPlacement(0, G4ThreeVector(0.*m, 0.*m, -4.*m), logicDetector, "physDetector", logicWorld, false, 0., true);
+    physDetector = new G4PVPlacement(0, G4ThreeVector(0. * m, 0. * m, -4. * m), logicDetector, "physDetector",
+                                     logicWorld, false, 0., true);
 
-    physDetector = new G4PVPlacement(0, G4ThreeVector(0.*m, 0.*m, 4.*m), logicDetector, "physDetector", logicWorld, false, 1., true);
+    physDetector = new G4PVPlacement(0, G4ThreeVector(0. * m, 0. * m, 4. * m), logicDetector, "physDetector",
+                                     logicWorld, false, 1., true);
+}
+
+void MyDetectorConstruction::ConstructAtmosphere() {
+    solidAtmosphere = new G4Box("solidAtmosphere", xWorld, yWorld, zWorld / 10.);
+    for (G4int i = 0; i  < 10; i++) {
+        logicAtmosphere[i] = new G4LogicalVolume(solidAtmosphere, Air[i], "logicAtmosphere");
+        physAtmosphere[i] = new G4PVPlacement(0, G4ThreeVector(0, 0, zWorld / 10 * 2 * i - zWorld + zWorld / 10.), logicAtmosphere[i],
+                                              "physAtmosphere", logicWorld, false, i, true);
+    }
 }
 
 void MyDetectorConstruction::ConstructSDandField() {
     MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-    if (logicDetector != NULL) {
-        logicDetector->SetSensitiveDetector(sensDet);
-    }
+//    if (logicDetector != NULL) {
+//        logicDetector->SetSensitiveDetector(sensDet);
+//    }
 }
 
 void MyDetectorConstruction::DefineMaterials() {
@@ -169,14 +187,14 @@ void MyDetectorConstruction::DefineMaterials() {
     NaI->AddElement(Na, 1);
     NaI->AddElement(I, 1);
 
-    G4double fraction[2] = {1.0, 1.0 };
+    G4double fraction[2] = {1.0, 1.0};
 
     G4MaterialPropertiesTable *mptNaI = new G4MaterialPropertiesTable();
     mptNaI->AddProperty("RINDEX", energy, rindexNaI, 2);
     mptNaI->AddProperty("FASTCOMPONENT", energy, fraction, 2);
-    mptNaI->AddConstProperty("SCINTILLATIONYIELD", 38./keV);
+    mptNaI->AddConstProperty("SCINTILLATIONYIELD", 38. / keV);
     mptNaI->AddConstProperty("RESOLUTIONSCALE", 1.0);
-    mptNaI->AddConstProperty("FASTTIMECONSTANT", 250*ns);
+    mptNaI->AddConstProperty("FASTTIMECONSTANT", 250 * ns);
     mptNaI->AddConstProperty("YIELDRATIO", 1.);
 
     NaI->SetMaterialPropertiesTable(mptNaI);
@@ -190,6 +208,30 @@ void MyDetectorConstruction::DefineMaterials() {
     G4MaterialPropertiesTable *mptMirror = new G4MaterialPropertiesTable();
     mptMirror->AddProperty("REFLECTIVITY", energy, reflectivity, 2);
     mirrorSurface->SetMaterialPropertiesTable(mptMirror);
+
+    G4double density0 = 1.29 * kg / m3;
+    G4double aN = 14.01 * g / mole;
+    G4double aO = 16.00 * g / mole;
+
+    N = new G4Element("Nitrogen", "N", 7, aN);
+    O = new G4Element("Oxygen", "O", 8, aO);
+
+    G4double f = 3.;
+    G4double R = 8.3144626181532;
+    G4double g0 = 9.81;
+    G4double kappa = (f + 2) / f;
+    G4double T = 293.15; //Ground temperature
+    G4double M = (0.3 * aO + 0.7 * aN) / 1000;
+
+    for (G4int i = 0; i < 10; i++) {
+        std::stringstream stri;
+        stri << i;
+        G4double h = 40e3 / 10. * i;
+        G4double density = density0 * pow((1 - (kappa) /kappa * M * g0 * h / (R * T)), 1 / (kappa - 1));
+        Air[i] =  new G4Material("G4_AIR" + stri.str(), density, 2);
+        Air[i]->AddElement(N, 70 * perCent);
+        Air[i]->AddElement(O, 30 * perCent);
+    }
 
 }
 
