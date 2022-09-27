@@ -26,6 +26,10 @@ public:
 
   G4VPhysicalVolume *Construct() override;
 
+  void ConstructCherenkov();
+  void ConstructScintillator();
+  void ConstructTOF();
+
 private:
     void ConstructSDandField() override;
 
@@ -35,7 +39,7 @@ private:
 
     G4double xWorld, yWorld, zWorld;
 
-    G4bool isCherenkov, isScintillator;
+    G4bool isCherenkov, isScintillator, isTOF;
 
     G4Box *solidWorld, *solidRadiator, *solidDetector, *solidScintillator;
 
@@ -51,9 +55,6 @@ private:
     G4OpticalSurface *mirrorSurface;
 
     void DefineMaterials();
-
-    void ConstructCherenkov();
-    void ConstructScintillator();
 };
 
 #endif

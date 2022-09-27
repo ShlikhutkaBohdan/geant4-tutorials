@@ -15,13 +15,17 @@ MySensitiveDetector::~MySensitiveDetector() {
 
 G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
     G4Track *track = aStep->GetTrack();
+
+//    track->SetTrackStatus(fStopAndKill);
+
     G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
     G4StepPoint *postStepPoint = aStep->GetPostStepPoint();
 
     G4ThreeVector posPhoton = preStepPoint->GetPosition();
     G4ThreeVector momPhoton = preStepPoint->GetMomentum();
 
-    G4double wlen = (1.239841939*eV/momPhoton.mag())*1E+03;
+    G4double time = preStepPoint->GetGlobalTime();
+    G4double wlen = (1.239841939 * eV / momPhoton.mag()) * 1E+03;
 
 //    G4cout << "Photon position" << posPhoton << G4endl;
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
@@ -45,13 +49,14 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     man->FillNtupleIColumn(0, 0, evt);
     man->FillNtupleDColumn(0, 1, posDetector[0]);
     man->FillNtupleDColumn(0, 2, posDetector[1]);
-    man->FillNtupleDColumn(0,3, posDetector[2]);
-    man->FillNtupleDColumn(0,4, wlen);
+    man->FillNtupleDColumn(0, 3, posDetector[2]);
+    man->FillNtupleDColumn(0, 4, wlen);
+    man->FillNtupleDColumn(0, 5, time);
 
     man->FillNtupleIColumn(1, 0, evt);
     man->FillNtupleDColumn(1, 1, posDetector[0]);
     man->FillNtupleDColumn(1, 2, posDetector[1]);
-    man->FillNtupleDColumn(1,3, posDetector[2]);
+    man->FillNtupleDColumn(1, 3, posDetector[2]);
 
     man->AddNtupleRow(0);
 }
