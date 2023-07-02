@@ -8,7 +8,8 @@
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
 
-#include "g4root.hh"
+//#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "run.hh"
 
 class MyEventAction : public G4UserEventAction {

@@ -1,11 +1,12 @@
 //
 // Created by Boday Alfaro on 13.09.2022.
 //
-
 #include "G4SystemOfUnits.hh"
 #include "detector.hh"
-#include "g4root.hh"
+//#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
+
 
 MySensitiveDetector::MySensitiveDetector(const G4String &name) : G4VSensitiveDetector(name) {}
 

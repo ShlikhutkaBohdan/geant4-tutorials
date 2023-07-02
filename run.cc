@@ -2,7 +2,8 @@
 // Created by Boday Alfaro on 14.09.2022.
 //
 
-#include "g4root.hh"
+//#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include "run.hh"
 #include "G4Run.hh"
 
